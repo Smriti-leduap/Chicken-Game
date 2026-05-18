@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Egg Catcher Chaos </title>
+    <link rel="stylesheet" href="style.css?v=18">
+</head>
+
+<body>
+
+    <div id="game-container">
+
+        <div id="hud">
+            <div class="hud-group">
+                <div class="hud-item" id="score-box">
+                    <span class="label">Score:</span>
+                    <span id="score-val">10</span>
+                </div>
+                <div class="hud-item" id="strike-box">
+                    <span class="label">Cracks:</span>
+                    <div id="strike-icons">
+                        <span class="strike-slot"></span>
+                        <span class="strike-slot"></span>
+                        <span class="strike-slot"></span>
+                    </div>
+                </div>
+                <div id="combo-badge" class="hidden">
+                    COMBO x<span id="combo-val">0</span>
+                </div>
+            </div>
+
+            <div class="hud-group align-right" style="align-items: flex-end;">
+                <div class="hud-item" id="high-score-box">
+                    <span class="label">Best:</span>
+                    <span id="high-score-val">0</span>
+                </div>
+                <div id="pause-btn" title="Pause Game">
+                    <svg width="16" height="18" viewBox="0 0 24 24" fill="#2d3436" stroke="none">
+                        <rect x="5" y="3" width="5" height="18" rx="2"></rect>
+                        <rect x="14" y="3" width="5" height="18" rx="2"></rect>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+
+        <canvas id="gameCanvas"></canvas>
+
+
+        <div id="start-screen" class="overlay">
+            <div class="start-card game-ui-card">
+                <div class="card-header">
+                    <span class="game-over-banner">EGG CATCHER CHAOS</span>
+                </div>
+                
+                <div class="inner-panel">
+                    <p class="start-subtitle">Catch the eggs, avoid the broken ones!</p>
+                    <p class="warning-text">3 Broken Eggs = Game Over!</p>
+                    
+                    <div class="legend-panel">
+                        <div class="legend-row">
+                            <div class="legend-card normal-egg">
+                                <img src="assets/egg_normal.png" alt="Normal Egg" class="legend-img" width="36" height="36">
+                                <div class="legend-info">
+                                    <span class="legend-name">Normal Egg</span>
+                                    <span class="legend-pts pts-plus">+1 Point</span>
+                                </div>
+                            </div>
+                            <div class="legend-card golden-egg">
+                                <img src="assets/egg_golden.png" alt="Golden Egg" class="legend-img" width="36" height="36">
+                                <div class="legend-info">
+                                    <span class="legend-name">Golden Egg</span>
+                                    <span class="legend-pts pts-plus">+5 Points</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="legend-row">
+                            <div class="legend-card rainbow-egg">
+                                <img src="assets/egg_rainbow.png" alt="Rainbow Egg" class="legend-img" width="36" height="36">
+                                <div class="legend-info">
+                                    <span class="legend-name">Rainbow Egg</span>
+                                    <span class="legend-pts pts-plus">+10 Points</span>
+                                </div>
+                            </div>
+                            <div class="legend-card broken-egg">
+                                <img src="assets/broken_egg.png" alt="Broken Egg" class="legend-img" width="36" height="36">
+                                <div class="legend-info">
+                                    <span class="legend-name">Broken Egg</span>
+                                    <span class="legend-pts pts-minus">-1 Point</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="btn-group">
+                    <button id="start-btn" class="game-btn primary-btn play-btn" >
+                        PLAY NOW
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="game-over-screen" class="overlay hidden">
+            <div class="game-over-card game-ui-card">
+                <div class="card-header">
+                    <span class="game-over-banner">GAME OVER</span>
+                </div>
+                
+                <div class="inner-panel">
+                    <h1 id="game-over-title">3 BROKEN EGGS</h1>
+                    <p id="game-over-subtitle">The chicken outsmarted you.</p>
+                    
+                    <div class="stats-panel">
+                        <div class="stat-box">
+                            <span class="stat-lbl">FINAL POINTS</span>
+                            <span id="final-score" class="stat-val">0</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-lbl">ALL-TIME BEST</span>
+                            <span id="final-best" class="stat-val">0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="btn-group">
+                    <button id="new-game-btn" class="game-btn primary-btn">
+                        New Game
+                    </button>
+                    <button id="restart-btn" class="game-btn round-btn" title="Restart">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="pause-screen" class="overlay hidden">
+            <div class="pause-card game-ui-card">
+                <div class="card-header">
+                    <span class="game-over-banner">PAUSED</span>
+                </div>
+                
+                <div class="inner-panel">
+                    <h1 class="start-title">Game Paused</h1>
+                    <p class="start-subtitle">Chickens are waiting...</p>
+                </div>
+                
+                <div class="btn-group">
+                    <button id="resume-btn" class="game-btn primary-btn play-btn">
+                        CONTINUE
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets.js?v=18"></script>
+    <script src="game.js?v=18"></script>
+</body>
+
+</html>
